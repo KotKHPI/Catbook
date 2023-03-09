@@ -18,6 +18,12 @@ class CreateCatNamesTable extends Migration
             $table->string('name');
             $table->integer('age');
             $table->timestamps();
+
+//            if(env('DB_CONNECTION') === 'sqlite_testing') {
+//                $table->string('name')->default();
+//            } else {
+//                $table->string('name');
+//            } FOR to solve problem with testing
         });
     }
 
