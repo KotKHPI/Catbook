@@ -17,6 +17,20 @@
             <a class="p-2" href="{{route('contact')}}">Contact</a>
             <a class="p-2" href="{{route('cats.index')}}">Show all cat</a>
             <a class="p-2" href="{{route('cats.create')}}">Add new cat</a>
+            @guest
+                @if(Route::has('register'))
+                    <a class="p-2 text-dark" href="{{ route('register') }}">Register</a>
+                @endif
+                <a class="p-2 text-dark" href="{{ route('login') }}">Login</a>
+            @else
+                <a class="p-2 text-dark" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                >Logout ({{Auth::user()->name}})</a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                @csrf
+                </form>
+            @endguest
         </nav>
 
     </div>
