@@ -19,7 +19,7 @@ class AddUserToCatNamesTable extends Migration
             if(env('DB_CONNECTION') === 'sqlite') {
                 $table->unsignedBigInteger('user_id')->default(0);
             } else {
-                $table->unsignedBigInteger('user_id')->unique();
+                $table->unsignedBigInteger('user_id');
             }
 
 
@@ -35,8 +35,8 @@ class AddUserToCatNamesTable extends Migration
     public function down()
     {
         Schema::table('cat_names', function (Blueprint $table) {
-            $table->dropColumn('user_id');
             $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 }

@@ -14,17 +14,17 @@ class CatNameFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->city(),
             'age' => $this->faker->numberBetween(1, 50)
         ];
     }
 
-    public function states()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'name' => 'Meoow',
-            ];
-        });
-    }
+//    public function states()
+//    {
+//        return $this->state(function (array $attributes) {
+//            return [
+//                'name' => 'Meoow',
+//            ];
+//        });
+//    }
 }
