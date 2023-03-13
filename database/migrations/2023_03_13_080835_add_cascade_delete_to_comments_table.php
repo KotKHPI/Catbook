@@ -14,11 +14,11 @@ class AddCascadeDeleteToCommentsTable extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropForeign(['cat_name_id']);
-            $table->foreign('cat_name_id')
-                ->references('id')
-                ->on('cat_names')
-                ->onDelete('cascade');
+//            $table->dropForeign(['cat_name_id']);
+//            $table->foreign('cat_name_id')
+//                ->references('id')
+//                ->on('cat_names')
+//                ->onDelete('cascade');
         });
     }
 
@@ -30,10 +30,10 @@ class AddCascadeDeleteToCommentsTable extends Migration
     public function down()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropForeign(['cat_name_id']);
-            $table->foreign('cat_name_id')
-                ->references('id')
-                ->on('cat_names');
+//            $table->dropForeign(['cat_name_id']);
+//            $table->foreign('cat_name_id')
+//                ->references('id')
+//                ->on('cat_names');
         });
     }
 }
