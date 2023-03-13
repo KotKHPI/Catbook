@@ -14,4 +14,13 @@ class CatName extends Model
     {
         return $this->hasMany('App\Models\Comment');
     }
+
+    public static function boot ()
+    {
+        parent::boot();
+
+        static::deleting(function (CatName $catName) {
+            $catName->comments()->delete();
+        });
+    }
 }
