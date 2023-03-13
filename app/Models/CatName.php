@@ -19,8 +19,8 @@ class CatName extends Model
     {
         parent::boot();
 
-        static::deleting(function (CatName $catName) {
-            $catName->comments()->delete();
-        });
+//        static::deleting(function (CatName $catName) {
+//            $catName->comments()->delete();
+//        });
     }
 }
