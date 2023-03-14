@@ -12,6 +12,11 @@
         <a href="{{route('cats.show', ['cat' => $cat->id])}}">{{$cat['name']}}</a>
         <p>{{$cat['age']}}</p>
 
+        <p class="text-muted">
+            Added {{\Carbon\Carbon::parse($cat['created_at'])->diffForHumans() }}
+            by {{$cat->user->name}}
+        </p>
+
         @if($cat->comments_count)
             <p>{{$cat->comments_count}} comments</p>
         @else
