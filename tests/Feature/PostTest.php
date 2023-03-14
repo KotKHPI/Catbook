@@ -112,6 +112,7 @@ class PostTest extends TestCase
         $this->assertEquals(session('status'), 'Cat was update!');
 
         $this->assertDatabaseMissing('cat_names', $cat->toArray());
+//        $this->assertSoftDeleted('cat_names', $cat->toArray());
     }
 
     public function testDeleting()

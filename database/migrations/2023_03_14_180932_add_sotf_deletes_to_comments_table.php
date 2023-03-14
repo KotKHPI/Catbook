@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCascadeDeleteToCommentsTable extends Migration
+class AddSotfDeletesToCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,7 @@ class AddCascadeDeleteToCommentsTable extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
-            if (env('DB_CONNECTION') === 'sqlite_testing') {
-                $table->dropForeign(['cat_name_id']);
-            }
-            $table->foreign('cat_name_id')
-                ->references('id')
-                ->on('cat_names')
-                ->onDelete('cascade');
+            $table->softDeletes();
         });
     }
 
@@ -32,10 +26,7 @@ class AddCascadeDeleteToCommentsTable extends Migration
     public function down()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropForeign(['cat_name_id']);
-            $table->foreign('cat_name_id')
-                ->references('id')
-                ->on('cat_names');
+            $table->dropSoftDeletes();
         });
     }
 }
