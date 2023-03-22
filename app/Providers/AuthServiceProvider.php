@@ -13,7 +13,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+         'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\CatName' => 'App\Policies\CatNamePolicy'
     ];
 
     /**
@@ -25,6 +26,23 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+//        Gate::define('update-cat', function($user, $cat) {
+//            return $user->id == $cat->user_id;
+//        });
+//
+//        Gate::define('delete-cat', function($user, $cat) {
+//            return $user->id == $cat->user_id;
+//        });
+//
+//        Gate::before(function ($user, $ability) {
+//            if($user->is_admin) {
+//                return true;
+//            }
+//        });
+
+//        Gate::define('cats.update', 'App\Policies\CatNamePolicy@update');
+//        Gate::define('cats.delete', 'App\Policies\CatNamePolicy@delete');
+
+//        Gate::resource('cats', 'App\Policies\CatNamePolicy');
     }
 }

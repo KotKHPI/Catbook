@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CatPost;
 use App\Models\CatName;
 use App\Models\Comment;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 
 class CatController extends Controller
@@ -75,7 +76,13 @@ class CatController extends Controller
      */
     public function edit($id)
     {
-        return view('home.editCat', ['cat' => CatName::findOrFail($id)]);
+        $cat = CatName::findOrFail($id);
+//        if(\Illuminate\Support\Facades\Gate::denies('update-cat', $cat)) {
+//            abort(403);
+//        }
+        $this->authorize($cat);
+
+        return view('home.editCat', ['cat' => $cat]);
     }
 
     /**
@@ -106,6 +113,9 @@ class CatController extends Controller
     public function destroy($id)
     {
         $cat = CatName::findOrFail($id);
+
+        $this->authorize($cat);
+
         $cat->delete();
 
         session()->flash('status', 'Cat ' . $cat['name'] . ' was lost(');
