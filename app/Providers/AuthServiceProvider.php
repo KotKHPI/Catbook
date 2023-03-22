@@ -26,6 +26,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('home.secret', function ($user) {
+            return $user->is_admin;
+        });
+
 //        Gate::define('update-cat', function($user, $cat) {
 //            return $user->id == $cat->user_id;
 //        });
@@ -34,11 +38,11 @@ class AuthServiceProvider extends ServiceProvider
 //            return $user->id == $cat->user_id;
 //        });
 //
-//        Gate::before(function ($user, $ability) {
-//            if($user->is_admin) {
-//                return true;
-//            }
-//        });
+        Gate::before(function ($user, $ability) {
+            if($user->is_admin && in_array($ability, ['update'])) {
+                return true;
+            }
+        });
 
 //        Gate::define('cats.update', 'App\Policies\CatNamePolicy@update');
 //        Gate::define('cats.delete', 'App\Policies\CatNamePolicy@delete');
