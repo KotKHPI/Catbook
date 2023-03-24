@@ -13,13 +13,17 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createDummyCatName() : CatName {
-        $cat = new CatName();
-        $cat->name = 'Meow';
-        $cat->age = 12;
-        $cat->save();
+    private function createDummyCatName($userId = null) : CatName {
+//        $cat = new CatName();
+//        $cat->name = 'Meow';
+//        $cat->age = 12;
+//        $cat->save();
+//
+//        return $cat;
 
-        return $cat;
+        return CatName::factory()->create([
+            'user_id' => $userId ?? $this->user()->id,
+        ]);
     }
 
 //    public function testNoCatWhenNothingInDatabase()
@@ -95,9 +99,10 @@ class PostTest extends TestCase
 
     public function testUpdateValid()
     {
-        $cat = $this->createDummyCatName();
+        $user = $this->user();
+        $cat = $this->createDummyCatName($user->id);
 
-        $user = User::factory()->make();
+//        $user = User::factory()->make();
 
         $cat2 = [
             'name' => 'New cat',
@@ -117,9 +122,10 @@ class PostTest extends TestCase
 
     public function testDeleting()
     {
-        $cat = $this->createDummyCatName();
+        $user = $this->user();
+        $cat = $this->createDummyCatName($user->id);
 
-        $user = User::factory()->make();
+//        $user = User::factory()->make();
 
         $this->actingAs($user)
             ->delete("/cats/{$cat->id}")
@@ -147,28 +153,6 @@ class PostTest extends TestCase
         $this->assertEquals(session('status'), 'New cat!');
     }
 
-//    public function testUpdateAgain()
-//    {
-//        $cat = [
-//            'name' => "Cat",
-//            'age' => 1
-//        ];
-//
-//        $user = User::factory()->make();
-//
-//        $cat2 = [
-//            'name' => "Super Cat",
-//            'age' => 123
-//        ];
-//
-//        $this->actingAs($user)
-//            ->put("/cats/{$cat->id}", $cat2)
-//            ->assertStatus(302)
-//            ->assertSessionHas('status');
-//
-//        $this->assertEquals(session('status'), 'Cat was update!');
-//        $this->assertDatabaseMissing('cat_names', $cat);
-//    }
 
     public function testSee1CatNameWithComments() {
         $cat = $this->createDummyCatName();
