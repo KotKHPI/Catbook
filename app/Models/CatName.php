@@ -10,7 +10,7 @@ class CatName extends Model
 {
     use SoftDeletes;
 
-    protected $fillable =['name', 'age'];
+    protected $fillable =['name', 'age', 'user_id'];
     use HasFactory;
 
     public function comments()
@@ -22,18 +22,18 @@ class CatName extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public static function boot ()
-    {
-        parent::boot();
-
-        static::deleting(function (CatName $catName) {
-            $catName->comments()->delete();
-        });
-
-        static::restoring(function (CatName $catName) {
-            $catName->comments()->restore();
-        });
-
-
-    }
+//    public static function boot ()
+//    {
+//        parent::boot();
+//
+//        static::deleting(function (CatName $catName) {
+//            $catName->comments()->delete();
+//        });
+//
+//        static::restoring(function (CatName $catName) {
+//            $catName->comments()->restore();
+//        });
+//
+//
+//    }
 }

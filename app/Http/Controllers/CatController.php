@@ -47,6 +47,7 @@ class CatController extends Controller
     public function store(CatPost $request)
     {
         $validete = $request->validated();
+        $validete['user_id'] = $request->user()->id;
         $cat = CatName::create($validete);
         $cat->save();
 
