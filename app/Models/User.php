@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,7 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function catname() {
+    public function catName() {
         return $this->hasMany('App\Models\CatName');
+    }
+
+    public function scopeWithMostCatNames(Builder $query) {
+        return $query->withCount('catName')->orderBy('cat_name_count', 'desc');
     }
 }

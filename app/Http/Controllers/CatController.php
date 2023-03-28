@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CatPost;
 use App\Models\CatName;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,9 @@ class CatController extends Controller
     {
         return view('home.cat',
             ['cats' => CatName::latest()->withCount('comments')->get(),
-                'mostCommented' => CatName::mostCommented()->take(5)->get()]
+                'mostCommented' => CatName::mostCommented()->take(5)->get(),
+                'mostActive' => User::withMostCatNames()->take(5)->get()
+            ]
         );
     }
 
