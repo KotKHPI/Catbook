@@ -8,6 +8,8 @@
     <div>Where are my cats?</div>
     @endif
 
+    <div class="row">
+        <div class="col-8">
     @foreach($cats as $cat)
         <a href="{{route('cats.show', ['cat' => $cat->id])}}">{{$cat['name']}}</a>
         <p>{{$cat['age']}}</p>
@@ -41,5 +43,26 @@
                 @endcan
         </div>
     @endforeach
+        </div>
+    <div class="col-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Most Commented</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    What people are currently talking about
+                </h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach($mostCommented as $post)
+                    <li class="list-group-item">
+                        <a href="{{ route('cats.show', ['cat' => $post->id]) }}">
+                            {{$post->name}}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    </div>
 
 @endsection

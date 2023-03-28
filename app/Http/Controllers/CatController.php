@@ -24,7 +24,8 @@ class CatController extends Controller
     public function index()
     {
         return view('home.cat',
-            ['cats' => CatName::withCount('comments')->get()]
+            ['cats' => CatName::latest()->withCount('comments')->get(),
+                'mostCommented' => CatName::mostCommented()->take(5)->get()]
         );
     }
 
@@ -64,6 +65,12 @@ class CatController extends Controller
      */
     public function show($id)
     {
+//        return view('home.showCat', [
+//            'cat' => CatName::with(['comments' => function($query) {
+//                return $query->latest();
+//            }])->findOrFail($id)
+//        ]);   One of variant using Local Query
+
         return view('home.showCat', [
             'cat' => CatName::with('comments')->findOrFail($id)
         ]);

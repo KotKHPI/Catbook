@@ -15,7 +15,8 @@ class CatNameFactory extends Factory
     {
         return [
             'name' => $this->faker->city(),
-            'age' => $this->faker->numberBetween(1, 50)
+            'age' => $this->faker->numberBetween(1, 50),
+            'created_at' => $this->faker->dateTimeBetween('- 3 months')
         ];
     }
 

@@ -21,7 +21,7 @@ class CommentsTableSeeder extends Seeder
             return;
         }
 
-        $commentCount = (int)$this->command->ask('How many cats would you like?', 50);
+        $commentCount = (int)$this->command->ask('How many comments would you like?', 50);
 
         \App\Models\Comment::factory($commentCount)->make()->each(function ($comment) use ($cats){
             $comment->cat_name_id = $cats->random()->id;
