@@ -27,7 +27,8 @@ class CatController extends Controller
         return view('home.cat',
             ['cats' => CatName::latest()->withCount('comments')->get(),
                 'mostCommented' => CatName::mostCommented()->take(5)->get(),
-                'mostActive' => User::withMostCatNames()->take(5)->get()
+                'mostActive' => User::withMostCatNames()->take(5)->get(),
+                'mostActiveLastMonth' => User::withMostCatNamesLastMonth()->take(5)->get()
             ]
         );
     }

@@ -44,25 +44,7 @@
         </div>
     @endforeach
         </div>
-{{--    <div class="col-4">--}}
-{{--        <div class="card" style="width: 18rem;">--}}
-{{--            <div class="card-body">--}}
-{{--                <h5 class="card-title">Most Commented</h5>--}}
-{{--                <h6 class="card-subtitle mb-2 text-muted">--}}
-{{--                    What people are currently talking about--}}
-{{--                </h6>--}}
-{{--            </div>--}}
-{{--            <ul class="list-group list-group-flush">--}}
-{{--                @foreach($mostCommented as $post)--}}
-{{--                    <li class="list-group-item">--}}
-{{--                        <a href="{{ route('cats.show', ['cat' => $post->id]) }}">--}}
-{{--                            {{$post->name}}--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endforeach--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+
         <div class="col-4">
             <div class="container">
                 <div class="row">
@@ -95,6 +77,23 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             @foreach ($mostActive as $user)
+                                <li class="list-group-item">
+                                    {{ $user->name }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <h5 class="card-title">Most Active Last Month</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Users with most has cats last month
+                            </h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ($mostActiveLastMonth as $user)
                                 <li class="list-group-item">
                                     {{ $user->name }}
                                 </li>

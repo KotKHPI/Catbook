@@ -49,4 +49,11 @@ class User extends Authenticatable
     public function scopeWithMostCatNames(Builder $query) {
         return $query->withCount('catName')->orderBy('cat_name_count', 'desc');
     }
+
+    public function scopeWithMostCatNamesLastMonth(Builder $query) {
+        return $query->withCount(['catName' => function(Builder $query) {
+            $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);
+        }])->having('cat_name_count', '>=', 2)
+            ->orderBy('cat_name_count', 'desc');
+    }
 }
