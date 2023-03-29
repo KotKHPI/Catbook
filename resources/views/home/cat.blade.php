@@ -11,7 +11,14 @@
     <div class="row">
         <div class="col-8">
     @foreach($cats as $cat)
-        <a href="{{route('cats.show', ['cat' => $cat->id])}}">{{$cat['name']}}</a>
+                @if($cat->trashed())
+                    <del>
+                        @endif
+        <a class="{{$cat->trashed() ? 'text-muted' : ''}}"
+            href="{{route('cats.show', ['cat' => $cat->id])}}">{{$cat['name']}}</a>
+                @if($cat->trashed())
+                    </del>
+                        @endif
         <p>{{$cat['age']}}</p>
 
         <p class="text-muted">
@@ -34,6 +41,7 @@
                 <p>You can't delete this cat!!!</p>
             @endcannot
 
+            @if(!$cat->trashed())
             @can('delete', $cat)
             <form class="d-inline" action="{{route('cats.destroy', ['cat' => $cat->id])}}" method="POST">
                 @csrf
@@ -41,6 +49,7 @@
                 <input type="submit" value="Delete" class="btn btn-primary">
             </form>
                 @endcan
+                @endif
         </div>
     @endforeach
         </div>
