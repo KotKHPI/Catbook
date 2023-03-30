@@ -61,15 +61,10 @@ class PostTest extends TestCase
     {
         $params = [
           'name' => 'meow',
-          'age' => 10
+          'age' => 10,
         ];
 
-        $user = User::factory()->make();
-
-        $this->actingAs($user);
-
-
-        $this->actingAs($user)
+        $this->actingAs($this->user()) //You can use {user()} because I have function in TestCase.php
             ->post('/cats', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -84,10 +79,7 @@ class PostTest extends TestCase
             'age' => 1
         ];
 
-        $user = User::factory()->make();
-
-
-        $this->actingAs($user)
+        $this->actingAs($this->user()) //You can use {user()} because I have function in TestCase.php
             ->post('/cats', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
@@ -143,9 +135,7 @@ class PostTest extends TestCase
             'age' => 123
         ];
 
-        $user = User::factory()->make();
-
-        $this->actingAs($user)
+        $this->actingAs($this->user()) //You can use {user()} because I have function in TestCase.php
             ->post('/cats', $cat)
             ->assertStatus(302)
             ->assertSessionHas('status');
