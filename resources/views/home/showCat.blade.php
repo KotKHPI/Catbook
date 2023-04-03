@@ -6,12 +6,26 @@
 
 
         <h1>{{$cat->name}}</h1>
-        <p>{{$cat->age}}</p>
-<p>Added {{$cat->created_at->diffForHumans()}}</p>
 
-    @if(now()->diffInMinutes($cat->created_at) < 5)
-        <div class="alert alert-info">New!</div>
-        <div class="badge badge-success">New!</div>
+        @badge(['show' => now()->diffInMinutes($cat->created_at) < 25])
+            Brand new Cat
+        @endbadge
+
+        <p>{{$cat->age}}</p>
+
+        <p>Added {{$cat->created_at->diffForHumans()}}</p>
+
+        @update(['date' => $cat->created_at, 'name' => $cat->user->name])
+        @endupdate
+
+        @update(['date' => $cat->updated_at])
+        Updated
+        @endupdate
+
+    @if((new \Carbon\Carbon())->diffInMinutes($cat->created_at) < 20)
+        @badge(['type' => 'primary'])
+            New!
+        @endbadge
     @endif
 
         <h4>Comments</h4>
