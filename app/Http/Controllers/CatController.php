@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CatController extends Controller
 {
@@ -19,16 +20,28 @@ class CatController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only('create', 'edit', 'destroy');
     }
 
     public function index()
     {
+        $mostCommented = Cache::remember('mostCommented', 60, function() {
+            return CatName::mostCommented()->take(5)->get();
+        });
+
+        $mostActive = Cache::remember('mostActive', 60, function() {
+            return User::withMostCatNames()->take(5)->get();
+        });
+
+        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', 60, function() {
+            return User::withMostCatNamesLastMonth()->take(5)->get();
+        });
+
         return view('home.cat',
-            ['cats' => CatName::latest()->withCount('comments')->get(),
-                'mostCommented' => CatName::mostCommented()->take(5)->get(),
-                'mostActive' => User::withMostCatNames()->take(5)->get(),
-                'mostActiveLastMonth' => User::withMostCatNamesLastMonth()->take(5)->get()
+            ['cats' => CatName::latest()->withCount('comments')->with('user')->get(),
+                'mostCommented' => $mostCommented,
+                'mostActive' => $mostActive,
+                'mostActiveLastMonth' => $mostActiveLastMonth
             ]
         );
     }

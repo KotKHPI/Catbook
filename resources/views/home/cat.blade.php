@@ -33,23 +33,29 @@
         @endif
 
         <div class="mb-3">
-            @can('update', $cat)
-            <a href="{{route('cats.edit', ['cat' => $cat->id])}}" class="btn btn-primary">Edit</a>
-            @endcan
+
+            @auth
+                @can('update', $cat)
+                    <a href="{{route('cats.edit', ['cat' => $cat->id])}}" class="btn btn-primary">Edit</a>
+                @endcan
+            @endauth
 
             @cannot('delete', $cat)
                 <p>You can't delete this cat!!!</p>
             @endcannot
 
             @if(!$cat->trashed())
-            @can('delete', $cat)
-            <form class="d-inline" action="{{route('cats.destroy', ['cat' => $cat->id])}}" method="POST">
-                @csrf
-                @method('DELETE')
-                <input type="submit" value="Delete" class="btn btn-primary">
-            </form>
-                @endcan
-                @endif
+                @auth
+                    @can('delete', $cat)
+                        <form class="d-inline" action="{{route('cats.destroy', ['cat' => $cat->id])}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Delete" class="btn btn-primary">
+                        </form>
+                    @endcan
+                @endauth
+            @endif
+
         </div>
     @endforeach
         </div>
