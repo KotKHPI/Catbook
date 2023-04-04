@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class CatName extends Model
 {
@@ -44,6 +45,10 @@ class CatName extends Model
 
         static::deleting(function (CatName $catName) {
             $catName->comments()->delete();
+        });
+
+        static::updating(function (CatName $catName) {
+            Cache::forget("cat-name-{$catName->id}");
         });
 
         static::restoring(function (CatName $catName) {

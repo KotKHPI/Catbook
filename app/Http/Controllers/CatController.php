@@ -88,8 +88,12 @@ class CatController extends Controller
 //            }])->findOrFail($id)
 //        ]);   One of variant using Local Query
 
+        $catName = Cache::remember("cat-name-{$id}", 60, function () use($id) {
+            return CatName::with('comments')->findOrFail($id);
+        });
+
         return view('home.showCat', [
-            'cat' => CatName::with('comments')->findOrFail($id)
+            'cat' => $catName
         ]);
     }
 
