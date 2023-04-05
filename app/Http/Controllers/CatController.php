@@ -25,15 +25,15 @@ class CatController extends Controller
 
     public function index()
     {
-        $mostCommented = Cache::remember('mostCommented', 60, function() {
+        $mostCommented = Cache::tags(['cat-name'])->remember('mostCommented', 60, function() {
             return CatName::mostCommented()->take(5)->get();
         });
 
-        $mostActive = Cache::remember('mostActive', 60, function() {
+        $mostActive = Cache::tags(['cat-name'])->remember('mostActive', 60, function() {
             return User::withMostCatNames()->take(5)->get();
         });
 
-        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', 60, function() {
+        $mostActiveLastMonth = Cache::tags(['cat-name'])->remember('mostActiveLastMonth', 60, function() {
             return User::withMostCatNamesLastMonth()->take(5)->get();
         });
 
@@ -88,7 +88,7 @@ class CatController extends Controller
 //            }])->findOrFail($id)
 //        ]);   One of variant using Local Query
 
-        $catName = Cache::remember("cat-name-{$id}", 60, function () use($id) {
+        $catName = Cache::tags(['cat-name'])->remember("cat-name-{$id}", 60, function () use($id) {
             return CatName::with('comments')->findOrFail($id);
         });
 
@@ -96,7 +96,7 @@ class CatController extends Controller
         $counterKey = "blog-post-{$id}-counter";
         $usersKey = "blog-post-{$id}-users";
 
-        $users = Cache::get($usersKey, []);
+        $users = Cache::tags(['cat-name'])->get($usersKey, []);
         $usersUpdate = [];
         $diffrence = 0;
         $now = now();
@@ -119,13 +119,13 @@ class CatController extends Controller
         $usersUpdate[$sessionId] = $now;
         Cache::forever($usersKey, $usersUpdate);
 
-        if (!Cache::has($counterKey)) {
-            Cache::forever($counterKey, 1);
+        if (!Cache::tags(['cat-name'])->has($counterKey)) {
+            Cache::tags(['cat-name'])->forever($counterKey, 1);
         } else {
-            Cache::increment($counterKey, $diffrence);
+            Cache::tags(['cat-name'])->increment($counterKey, $diffrence);
         }
 
-        $counter = Cache::get($counterKey);
+        $counter = Cache::tags(['cat-name'])->get($counterKey);
 
         return view('home.showCat', [
             'cat' => $catName,
