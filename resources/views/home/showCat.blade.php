@@ -22,6 +22,8 @@
         Updated
         @endupdate
 
+        <p>Currently read by {{ $counter }} people</p>
+
     @if((new \Carbon\Carbon())->diffInMinutes($cat->created_at) < 20)
         @badge(['type' => 'primary'])
             New!
