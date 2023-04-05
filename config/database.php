@@ -119,7 +119,7 @@ return [
 
     'redis' => [
 
-        'client' => env('REDIS_CLIENT', 'phpredis'),
+        'client' => env('REDIS_CLIENT', 'predis'), //solve the problem "Class 'Redis' not found"
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
