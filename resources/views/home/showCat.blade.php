@@ -30,6 +30,8 @@
         @endbadge
     @endif
 
+        @tags(['tags' => $cat->tags]) @endtags
+
         <h4>Comments</h4>
     @forelse($cat->comments as $comment)
         <p>
