@@ -11,10 +11,9 @@ class CatTagController extends Controller
     {
         $tag = Tag::findOrFail($tag);
 
-        return view('home.cat', ['cats' => $tag->catName,
-            'mostCommented' => [],
-            'mostActive' => [],
-            'mostActiveLastMonth' => []
+        return view('home.cat',
+            [
+                'cats' => $tag->catName,
             ]);
 
     }

@@ -58,7 +58,6 @@
         </div>
 
         @tags(['tags' => $cat->tags]) @endtags
-                {{dd($cat)}}
 {{--                    <x-tags :tags="$cat->tags" />--}}
 
     @endforeach

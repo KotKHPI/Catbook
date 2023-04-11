@@ -25,25 +25,11 @@ class CatController extends Controller
 
     public function index()
     {
-        $mostCommented = Cache::tags(['cat-name'])->remember('mostCommented', 60, function() {
-            return CatName::mostCommented()->take(5)->get();
-        });
-
-        $mostActive = Cache::tags(['cat-name'])->remember('mostActive', 60, function() {
-            return User::withMostCatNames()->take(5)->get();
-        });
-
-        $mostActiveLastMonth = Cache::tags(['cat-name'])->remember('mostActiveLastMonth', 60, function() {
-            return User::withMostCatNamesLastMonth()->take(5)->get();
-        });
 
         return view('home.cat',
-            ['cats' => CatName::latest()->withCount('comments')->with('user', 'tags')->get(),
-                'mostCommented' => $mostCommented,
-                'mostActive' => $mostActive,
-                'mostActiveLastMonth' => $mostActiveLastMonth
-            ]
-        );
+            [
+                'cats' => CatName::latest()->withCount('comments')->with('user', 'tags')->get()
+            ]);
     }
 
     /**
