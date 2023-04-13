@@ -28,7 +28,7 @@ class CatController extends Controller
 
         return view('home.cat',
             [
-                'cats' => CatName::latest()->withCount('comments')->with('user', 'tags')->get()
+                'cats' => CatName::latestWithRelations()->get()
             ]);
     }
 
@@ -75,7 +75,7 @@ class CatController extends Controller
 //        ]);   One of variant using Local Query
 
         $catName = Cache::tags(['cat-name'])->remember("cat-name-{$id}", 60, function () use($id) {
-            return CatName::with('comments', 'tags')->findOrFail($id);
+            return CatName::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
         $sessionId = session()->getId();

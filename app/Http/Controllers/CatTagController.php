@@ -13,7 +13,9 @@ class CatTagController extends Controller
 
         return view('home.cat',
             [
-                'cats' => $tag->catName,
+                'cats' => $tag->catName()
+                    ->latestWithRelations()
+                    ->get(),
             ]);
 
     }

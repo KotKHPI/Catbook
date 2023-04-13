@@ -10,5 +10,9 @@
     <input class="form-control" id="content" name="age" value="{{old('age', optional($cat ?? null)->age)}}">
 </div>
 
+<div class="form-group">
+    <label for="content">Thumbnail</label>
+    <input class="form-control-file" type="file" name="Thumbnail"/>
+</div>
 
 @errors @enderrors
