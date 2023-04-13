@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::aliasComponent('components.update', 'update');
         Blade::aliasComponent('components.card', 'card');
         Blade::aliasComponent('components.tags', 'tags');
+        Blade::aliasComponent('components.errors', 'errors');
 
         view()->composer(['home.cat', 'home.showCat'], ActivityComposer::class);
     }

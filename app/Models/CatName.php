@@ -49,10 +49,11 @@ class CatName extends Model
 
         static::deleting(function (CatName $catName) {
             $catName->comments()->delete();
+            Cache::tags(['cat-name'])->forget("cat-name-{$catName->id}");
         });
 
         static::updating(function (CatName $catName) {
-            Cache::forget("cat-name-{$catName->id}");
+            Cache::tags(['cat-name'])->forget("cat-name-{$catName->id}");
         });
 
         static::restoring(function (CatName $catName) {

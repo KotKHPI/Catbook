@@ -46,6 +46,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\CatName');
     }
 
+    public function comment() {
+        return $this->hasMany('App\Models\Comment');
+    }
+
     public function scopeWithMostCatNames(Builder $query) {
         return $query->withCount('catName')->orderBy('cat_name_count', 'desc');
     }

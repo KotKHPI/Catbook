@@ -58,7 +58,7 @@
                 </div>
 
                 @tags(['tags' => $cat->tags]) @endtags
-        {{--    <x-tags :tags="$cat->tags" />--}}
+{{--            <x-tags :tags="$cat->tags" />--}}
 
             @endforeach
         </div>
