@@ -12,7 +12,7 @@
 
 <div class="form-group">
     <label for="content">Thumbnail</label>
-    <input class="form-control-file" type="file" name="Thumbnail"/>
+    <input type="file" name="thumbnail" class="form-control-file"/>
 </div>
 
 @errors @enderrors

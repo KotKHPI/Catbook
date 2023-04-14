@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class CatController extends Controller
 {
@@ -55,7 +56,17 @@ class CatController extends Controller
         $cat = CatName::create($validete);
         $cat->save();
 
+        $hasFile = $request->hasFile('thumbnail');
+
+        if($hasFile) {
+            $file = $request->file('thumbnail');
+            $name = $file->storeAs('thumbnail', $cat->id . '.' . $file->guessExtension());
+            dd(Storage::url($name));
+        }
+
+
         $request->session()->flash('status', 'New cat!');
+
 
         return redirect()->route('cats.show', ['cat' => $cat->id]);
     }
