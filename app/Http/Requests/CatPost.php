@@ -25,7 +25,8 @@ class CatPost extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:100',
-            'age' => 'required|min:1'
+            'age' => 'required|min:1',
+            'thumbnail' => 'image|mimes: jpg, jpeg, png, giv|max: 1024'
         ];
     }
 }

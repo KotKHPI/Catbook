@@ -155,8 +155,24 @@ class CatController extends Controller
     public function update(CatPost $request, $id)
     {
         $cat = CatName::findOrFail($id);
+        $this->authorize($cat);
         $valideted = $request->validated();
         $cat->fill($valideted);
+
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnail');
+
+            if($cat->image) {
+                Storage::delete($cat->image->path);
+                $cat->image->path = $path;
+                $cat->image->save();
+            } else {
+                $cat->image->save(
+                    Image::create(['path' => $path])
+                );
+            }
+        }
+
         $cat->save();
 
         $request->session()->flash('status', 'Cat was update!');
