@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CatPost;
 use App\Models\CatName;
 use App\Models\Comment;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
@@ -54,19 +55,16 @@ class CatController extends Controller
         $validete = $request->validated();
         $validete['user_id'] = $request->user()->id;
         $cat = CatName::create($validete);
-        $cat->save();
 
-        $hasFile = $request->hasFile('thumbnail');
-
-        if($hasFile) {
-            $file = $request->file('thumbnail');
-            $name = $file->storeAs('thumbnail', $cat->id . '.' . $file->guessExtension());
-            dd(Storage::url($name));
+        if($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnail');
+            $cat->image()->save(
+                Image::create(['path' => $path])
+            );
         }
 
 
         $request->session()->flash('status', 'New cat!');
-
 
         return redirect()->route('cats.show', ['cat' => $cat->id]);
     }
