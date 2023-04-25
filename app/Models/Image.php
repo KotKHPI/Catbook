@@ -10,11 +10,11 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['path', 'cat_name_id'];
+    protected $fillable = ['path'];
 
-    public function catName()
+    public function imageable()
     {
-        return $this->belongsTo('App\Models\CatName');
+        return $this->morphTo();
     }
 
     public function url()

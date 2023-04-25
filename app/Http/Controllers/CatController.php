@@ -59,10 +59,9 @@ class CatController extends Controller
         if($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('thumbnail');
             $cat->image()->save(
-                Image::create(['path' => $path])
+                Image::make(['path' => $path])
             );
         }
-
 
         $request->session()->flash('status', 'New cat!');
 
@@ -167,8 +166,8 @@ class CatController extends Controller
                 $cat->image->path = $path;
                 $cat->image->save();
             } else {
-                $cat->image->save(
-                    Image::create(['path' => $path])
+                $cat->image()->save(
+                    Image::make(['path' => $path])
                 );
             }
         }

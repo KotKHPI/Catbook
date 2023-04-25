@@ -21,10 +21,14 @@
                                 @endif
                 <p>{{$cat['age']}}</p>
 
-                <p class="text-muted">
-                    Added {{\Carbon\Carbon::parse($cat['created_at'])->diffForHumans() }}
-                    by {{$cat->user->name}}
-                </p>
+{{--                <p class="text-muted">--}}
+{{--                    Added {{\Carbon\Carbon::parse($cat['created_at'])->diffForHumans() }}--}}
+{{--                    by {{$cat->user->name}}--}}
+{{--                </p>--}}
+
+                @update(['date' => $cat->created_at, 'name' => $cat->user->name, 'userId' => $cat->user->id])
+                @endupdate
+                @tags(['tags' => $cat->tags]) @endtags
 
                 @if($cat->comments_count)
                     <p>{{$cat->comments_count}} comments</p>
@@ -57,7 +61,6 @@
                     @endif
                 </div>
 
-                @tags(['tags' => $cat->tags]) @endtags
 {{--            <x-tags :tags="$cat->tags" />--}}
 
             @endforeach

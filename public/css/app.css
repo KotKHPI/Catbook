@@ -10936,3 +10936,8 @@ a.text-dark:focus {
   front-size: 1rem;
 }
 
+.avatar {
+  width: 128px;
+  height: 128px;
+}
+

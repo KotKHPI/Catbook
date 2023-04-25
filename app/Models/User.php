@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function image()
+    {
+        return $this->morphOne('App\Models\Image', 'imageable');
+    }
+
     public function scopeWithMostCatNames(Builder $query) {
         return $query->withCount('catName')->orderBy('cat_name_count', 'desc');
     }
