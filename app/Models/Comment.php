@@ -16,9 +16,9 @@ class Comment extends Model
 
     protected $fillable = ['content', 'user_id'];
 
-    public function catName()
+    public function commentable()
     {
-        return $this->belongsTo('App\Models\CatName', 'cat_name_id');
+        return $this->morphTo();
     }
 
     public function user()
@@ -37,8 +37,10 @@ class Comment extends Model
         parent::boot();
 
         static::creating(function (Comment $comment) {
-            Cache::tags(['cat-name'])->forget("cat-name-{$comment->cat_name_id}");
-            Cache::tags(['cat-name'])->forget("mostCommented");
+            if ($comment->commentable_type === CatName::class) {
+                Cache::tags(['cat-name'])->forget("cat-name-{$comment->commentable_id}");
+                Cache::tags(['cat-name'])->forget("mostCommented");
+            }
         });
 
 //        static::addGlobalScope(new LasestScope());

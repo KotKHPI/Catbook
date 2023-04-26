@@ -19,7 +19,7 @@ class CatName extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment')->latest(); // Second variant using Local Query
+        return $this->morphMany('App\Models\Comment', 'commentable')->latest(); // Second variant using Local Query
     }
 
     public function user() {
