@@ -1,6 +1,6 @@
 <div class="mb-2 mt-2">
     @auth
-        <form method="POST" action="{{ route('cats.comment.store', ['cat' => $cat->id]) }}">
+        <form method="POST" action="{{ $route }}">
             @csrf
 
             <div class="form-group">
@@ -14,4 +14,3 @@
         <a href="{{ route('login') }}">Sign-in</a> to post comments!
     @endauth
 </div>
-<hr/>

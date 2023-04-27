@@ -46,7 +46,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\CatName');
     }
 
-    public function comment() {
+    public function comments() {
         return $this->hasMany('App\Models\Comment');
     }
 

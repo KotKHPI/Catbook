@@ -27,5 +27,6 @@ Route::resource('users', UserController::class)->only(['show', 'edit', 'update']
 
 Route::get('/cats/tag/{tag}', [CatTagController::class, 'index'])->name('cats.tags.index');
 Route::resource('cats.comment', \App\Http\Controllers\CatCommentConrtoller::class)->only('store');
+Route::resource('users.comments', \App\Http\Controllers\UserCommentController::class)->only('store');
 
 Auth::routes();

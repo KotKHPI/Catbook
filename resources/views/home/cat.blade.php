@@ -11,14 +11,17 @@
     <div class="row">
         <div class="col-8">
             @foreach($cats as $cat)
-                        @if($cat->trashed())
-                            <del>
-                                @endif
+                @if($cat->trashed())
+                    <del>
+                @endif
                 <a class="{{$cat->trashed() ? 'text-muted' : ''}}"
-                    href="{{route('cats.show', ['cat' => $cat->id])}}">{{$cat['name']}}</a>
-                        @if($cat->trashed())
-                            </del>
-                                @endif
+                    href="{{route('cats.show', ['cat' => $cat->id])}}">{{$cat['name']}}
+                </a>
+
+                @if($cat->trashed())
+                    </del>
+                @endif
+
                 <p>{{$cat['age']}}</p>
 
 {{--                <p class="text-muted">--}}

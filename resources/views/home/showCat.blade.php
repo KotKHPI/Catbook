@@ -46,21 +46,13 @@
 
          <h4>Comments</h4>
 
-         @include('comments._form')
+         @commentForm(['route' => route('cats.comment.store', ['cat' => $cat->id])])
+         @endcommentForm
 
-         @forelse($cat->comments as $comment)
-             <p>
-                 {{ $comment->content }}
-             </p>
+         @commentList(['comments' => $cat->comments])
+         @endcommentList
 
-             <p>
-                 added {{\Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}
-                 by {{$comment->user->name}}
-             </p>
 
-             @empty
-                 <p>No comments yet!</p>
-             @endforelse
      </div>
 
         <div class="col-4">
