@@ -4,13 +4,9 @@
 
 @section('content')
 
-    @if(isset($cat))
-    <div>Where are my cats?</div>
-    @endif
-
     <div class="row">
         <div class="col-8">
-            @foreach($cats as $cat)
+            @forelse($cats as $cat)
                 @if($cat->trashed())
                     <del>
                 @endif
@@ -47,9 +43,9 @@
                         @endcan
                     @endauth
 
-                    @cannot('delete', $cat)
-                        <p>You can't delete this cat!!!</p>
-                    @endcannot
+{{--                    @cannot('delete', $cat)--}}
+{{--                        <p>You can't delete this cat!!!</p>--}}
+{{--                    @endcannot--}}
 
                     @if(!$cat->trashed())
                         @auth
@@ -63,10 +59,10 @@
                         @endauth
                     @endif
                 </div>
-
 {{--            <x-tags :tags="$cat->tags" />--}}
-
-            @endforeach
+            @empty
+                <div>Where are my cats?</div>
+            @endforelse
         </div>
         <div class="col-4">
             @include('posts.partials.activity')

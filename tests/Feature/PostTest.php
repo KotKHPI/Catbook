@@ -26,26 +26,27 @@ class PostTest extends TestCase
         ]);
     }
 
-//    public function testNoCatWhenNothingInDatabase()
-//    {
-//        $user = User::factory()->make();
-//
-//        $this->actingAs($user);
-//
-//        $response = $this->get('/cats');
-//
-//        $response->assertSeeText("Where are my cats?");
-//    } TO DO
+    public function testNoCatWhenNothingInDatabase()
+{
+    $user = User::factory()->make();
+
+    $this->actingAs($user);
+
+    $response = $this->get('/cats');
+
+    $response->assertSeeText("Where are my cats?");
+}
 
     public function testSee1CatPostWhenThereIs1()
     {
-        $user = User::factory()->make();
+        $user = $this->user();
 
         $this->actingAs($user);
 
         $cat = new CatName();
         $cat->name = 'Meow';
         $cat->age = 12;
+        $cat->user_id = 1;
         $cat->save();
 
         $response = $this->get('/cats');
@@ -145,14 +146,16 @@ class PostTest extends TestCase
 
 
     public function testSee1CatNameWithComments() {
+        $user = $this->user();
+
+//        $this->actingAs($user);
+
         $cat = $this->createDummyCatName();
 
-        $user = User::factory()->make();
-
-        $this->actingAs($user);
-
         Comment::factory()->count(4)->create([
-            'cat_name_id' => $cat->id
+            'commentable_id' => $cat->id,
+            'commentable_type' => 'App\Models\CatName',
+            'user_id' => $user->id
         ]);
 
         $response = $this->get('/cats');

@@ -31,7 +31,7 @@ class AddPilymorphToCommentsTable extends Migration
         Schema::table('comments', function (Blueprint $table) {
             $table->dropMorphs('commentable');
 
-            $table->unsignedBigInteger('cat_name_id')->index();
+            $table->unsignedBigInteger('cat_name_id')->index()->nullable();
             $table->foreign('cat_name_id')->references('id')->on('cat_names');
         });
     }
