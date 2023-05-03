@@ -52,7 +52,6 @@
          @commentList(['comments' => $cat->comments])
          @endcommentList
 
-
      </div>
 
         <div class="col-4">
