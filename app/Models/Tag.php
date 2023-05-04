@@ -13,6 +13,6 @@ class Tag extends Model
     }
 
     public function comments() {
-        return $this->morphedByMany('App\Models\Comment', 'taggable')->withTimestamps()->as('tagged');
+        return $this->morphedByMany('App\Models\Comment', 'taggable');
     }
 }
