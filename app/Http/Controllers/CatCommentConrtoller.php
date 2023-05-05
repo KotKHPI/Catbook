@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreComment;
 use App\Mail\CommentPosted;
+use App\Mail\CommentPostedMarkdown;
 use App\Models\CatName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -23,7 +24,7 @@ class CatCommentConrtoller extends Controller
         ]);
 
         Mail::to($cat->user)->send(
-            new CommentPosted($comment)
+            new CommentPostedMarkdown($comment)
         );
 
         return redirect()->back()

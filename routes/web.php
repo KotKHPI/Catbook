@@ -29,4 +29,9 @@ Route::get('/cats/tag/{tag}', [CatTagController::class, 'index'])->name('cats.ta
 Route::resource('cats.comment', \App\Http\Controllers\CatCommentConrtoller::class)->only('store');
 Route::resource('users.comments', \App\Http\Controllers\UserCommentController::class)->only('store');
 
+//Route::get('mailable', function () {
+//    $comment = App\Models\Comment::find(1);
+//    return new App\Mail\CommentPostedMarkdown($comment);
+//});
+
 Auth::routes();
