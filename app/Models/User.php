@@ -70,4 +70,11 @@ class User extends Authenticatable
         }])->has('catName', '>=', 2)
             ->orderBy('cat_name_count', 'desc');
     }
+
+    public function scopeThatHasCommentedOnCat(Builder $query, CatName $catName) {
+        return $query->whereHas('comments', function ($query) use ($catName) {
+            return $query->where('commentable_id', '=', $catName->id)
+                ->where('commentable_type', '=', CatName::class);
+        });
+    }
 }
