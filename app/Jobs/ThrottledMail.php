@@ -2,31 +2,33 @@
 
 namespace App\Jobs;
 
-use App\Mail\CommentPostedOnCatWatched;
-use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Mail\Mailable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 
-class NotifyUsersCatWasCommented implements ShouldQueue
+class ThrottledMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $comment;
+    public $user;
+    public $mail;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Comment $comment)
+    public function __construct(Mailable $mail, User $user)
     {
-        $this->comment = $comment;
+        $this->user = $user;
+        $this->mail = $mail;
     }
 
     /**
@@ -36,15 +38,10 @@ class NotifyUsersCatWasCommented implements ShouldQueue
      */
     public function handle()
     {
-        User::thatHasCommentedOnCat($this->comment->commentable)
-        ->get()
-        ->filter(function (User $user) {
-            return $user->id !== $this->comment->user->id;
-        })->map(function (User $user) {
-            ThrottledMail::dispatch(
-                new CommentPostedOnPostWatched($this->comment, $user),
-                $user
-            );
+        Redis::throttle('mailtrap')->allow(2)->every(12)->then(function () {
+            Mail::to($this->user)->send($this->mail);
+        }, function () {
+            return $this->release(5);
         });
     }
 }
