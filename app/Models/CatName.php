@@ -49,26 +49,4 @@ class CatName extends Model
             ->with('user')
             ->with('tags');
     }
-
-    public static function boot ()
-    {
-        static::addGlobalScope(new DeletedAdminScope());
-
-        parent::boot();
-
-//        static::addGlobalScope(new LasestScope());
-
-        static::deleting(function (CatName $catName) {
-            $catName->comments()->delete();
-            Cache::tags(['cat-name'])->forget("cat-name-{$catName->id}");
-        });
-
-        static::updating(function (CatName $catName) {
-            Cache::tags(['cat-name'])->forget("cat-name-{$catName->id}");
-        });
-
-        static::restoring(function (CatName $catName) {
-            $catName->comments()->restore();
-        });
-    }
 }

@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\ActivityComposer;
+use App\Models\CatName;
+use App\Models\Comment;
+use App\Observers\CatNameObserver;
+use App\Observers\CommentObserve;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -34,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::aliasComponent('components.errors', 'errors');
         Blade::aliasComponent('components.comment-form', 'commentForm');
         Blade::aliasComponent('components.comment-list', 'commentList');
+
+        CatName::observe(CatNameObserver::class);
+        Comment::observe(CommentObserve::class);
 
         view()->composer(['home.cat', 'home.showCat'], ActivityComposer::class);
     }

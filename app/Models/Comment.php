@@ -32,19 +32,4 @@ class Comment extends Model
     {
         return $builder->orderBy(static::CREATED_AT, 'desc');
     }
-
-
-    public static function boot ()
-    {
-        parent::boot();
-
-        static::creating(function (Comment $comment) {
-            if ($comment->commentable_type === CatName::class) {
-                Cache::tags(['cat-name'])->forget("cat-name-{$comment->commentable_id}");
-                Cache::tags(['cat-name'])->forget("mostCommented");
-            }
-        });
-
-//        static::addGlobalScope(new LasestScope());
-    }
 }
