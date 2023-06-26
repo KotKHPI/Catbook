@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreComment;
 use App\Jobs\NotifyUsersCatWasCommented;
-use App\Mail\CommentPosted;
+use App\Events\CommentPosted;
 use App\Mail\CommentPostedMarkdown;
 use App\Models\CatName;
 use Illuminate\Http\Request;
@@ -25,6 +25,11 @@ class CatCommentConrtoller extends Controller
         ]);
 
         event(new CommentPosted($comment));
+//        Mail::to($cat->user)->send(
+//            new CommentPostedMarkdown($comment)
+//        );
+//
+//        NotifyUsersCatWasCommented::dispatch($comment);
 
         return redirect()->back()
             ->withStatus('Comment was created!');

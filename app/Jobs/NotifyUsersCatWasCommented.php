@@ -42,7 +42,7 @@ class NotifyUsersCatWasCommented implements ShouldQueue
             return $user->id !== $this->comment->user->id;
         })->map(function (User $user) {
             ThrottledMail::dispatch(
-                new CommentPostedOnPostWatched($this->comment, $user),
+                new CommentPostedOnCatWatched($this->comment, $user),
                 $user
             );
         });

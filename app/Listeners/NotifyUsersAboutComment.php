@@ -19,7 +19,7 @@ class NotifyUsersAboutComment
      */
     public function handle(CommentPosted $event)
     {
-        dd($event);
+//        dd($event);
         ThrottledMail::dispatch(new CommentPostedMarkdown($event->comment), $event->comment->commentable->user)
             ->onQueue('low');;
         NotifyUsersCatWasCommented::dispatch($event->comment)
