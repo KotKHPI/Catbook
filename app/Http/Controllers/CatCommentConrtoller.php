@@ -24,11 +24,7 @@ class CatCommentConrtoller extends Controller
             'user_id' => $request->user()->id
         ]);
 
-        Mail::to($cat->user)->send(
-            new CommentPostedMarkdown($comment)
-        );
-
-        NotifyUsersCatWasCommented::dispatch($comment);
+        event(new CommentPosted($comment));
 
         return redirect()->back()
             ->withStatus('Comment was created!');
