@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\CatPosted;
 use App\Events\CommentPosted;
+use App\Listeners\CacheSubscriber;
 use App\Listeners\NotifyAdminWhenCatCreated;
 use App\Listeners\NotifyUsersAboutComment;
 use Illuminate\Auth\Events\Registered;
@@ -29,6 +30,10 @@ class EventServiceProvider extends ServiceProvider
             NotifyAdminWhenCatCreated::class
         ]
     ];
+
+    protected $subscribe = [
+        CacheSubscriber::class
+        ];
 
     /**
      * Register any events for your application.
