@@ -77,4 +77,8 @@ class User extends Authenticatable
                 ->where('commentable_type', '=', CatName::class);
         });
     }
+
+    public function scopeThatIsAnAdmin(Builder $query) {
+        return $query->where('is_admin', true);
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\CatPosted;
 use App\Events\CommentPosted;
+use App\Listeners\NotifyAdminWhenCatCreated;
 use App\Listeners\NotifyUsersAboutComment;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommentPosted::class => [
             NotifyUsersAboutComment::class
+        ],
+        CatPosted::class => [
+            NotifyAdminWhenCatCreated::class
         ]
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CatPosted;
 use App\Http\Requests\CatPost;
 use App\Models\CatName;
 use App\Models\Comment;
@@ -48,7 +49,7 @@ class CatController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function store(CatPost $request)
     {
@@ -63,6 +64,8 @@ class CatController extends Controller
             );
         }
 
+        event(new CatPosted($cat));
+
         $request->session()->flash('status', 'New cat!');
 
         return redirect()->route('cats.show', ['cat' => $cat->id]);
@@ -72,7 +75,7 @@ class CatController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
