@@ -6,5 +6,5 @@
     @update(['date' => $comment->created_at, 'name' => $comment->user->name, 'userId' => $comment->user->id])
     @endupdate
 @empty
-    <p>No comments yet!</p>
+    <p>{{ __('messages.comments') }}!</p>
 @endforelse

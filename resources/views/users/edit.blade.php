@@ -14,15 +14,28 @@
 
                 <div class="card mt-4">
                     <div class="card-body">
-                        <h6>Upload a different photo</h6>
+                        <h6>{{ __('Upload a different photo') }}</h6>
                         <input class="form-control-file" type="file" name="avatar" />
                     </div>
                 </div>
             </div>
+
             <div class="col-8">
                 <div class="form-group">
-                    <label>Name:</label>
+                    <label>{{ __('Name') }}:</label>
                     <input class="form-control" value="" type="text" name="name" />
+
+            </div>
+
+                <div class="form-group">
+                    <label>{{ __('Language') }}:</label>
+                    <select class="form-control" name="locale">
+                        @foreach(App\Models\User::LOCALE as $key => $locale)
+                            <option value="{{ $key }}" {{ $user->locale !== $key ?: 'selected' }}>
+                                {{ $locale }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 @errors @enderrors

@@ -2,7 +2,7 @@
     <div class="row">
         @card(['title' => 'Most Commented'])
         @slot('subtitle')
-            What people are currently talking about
+            {{ __('What people are currently talking about') }}
         @endslot
         @slot('items')
             @foreach($mostCommented as $post)
@@ -19,7 +19,7 @@
     <div class="row mt-4">
         @card(['title' => 'Most Active'])
         @slot('subtitle')
-            Users with most has cats
+            {{ __('Writers with most cats') }}
         @endslot
         @slot('items', collect($mostActive)->pluck('name'))
         @endcard
@@ -28,7 +28,7 @@
     <div class="row mt-4">
         @card(['title' => 'Most Active Last Month'])
         @slot('subtitle')
-            Users with most has cats last month
+            {{ __('Users with most cats written in the month') }}
         @endslot
         @slot('items', collect($mostActiveLastMonth)->pluck('name'))
         @endcard

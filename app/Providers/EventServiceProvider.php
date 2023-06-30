@@ -31,9 +31,9 @@ class EventServiceProvider extends ServiceProvider
         ]
     ];
 
-    protected $subscribe = [
-        CacheSubscriber::class
-        ];
+//    protected $subscribe = [
+//        CacheSubscriber::class
+//        ];
 
     /**
      * Register any events for your application.

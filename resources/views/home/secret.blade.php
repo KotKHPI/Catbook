@@ -3,5 +3,5 @@
 @section('title', 'Secret page')
 
 @section('content')
-    You are amazing!
+    {{ __('You are amazing!') }}
 @endsection

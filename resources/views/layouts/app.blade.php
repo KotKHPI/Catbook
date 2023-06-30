@@ -13,19 +13,26 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm mb-3">
         <h5 class="my-0 mr-md-auto font-weight-normal">Laravel App</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2" href="{{route('home')}}">Home</a>
-            <a class="p-2" href="{{route('contact')}}">Contact</a>
-            <a class="p-2" href="{{route('cats.index')}}">Show all cat</a>
-            <a class="p-2" href="{{route('cats.create')}}">Add new cat</a>
+            <a class="p-2" href="{{route('home')}}">{{ __('Home') }}</a>
+            <a class="p-2" href="{{route('contact')}}">{{ __('Contact') }}</a>
+            <a class="p-2" href="{{route('cats.index')}}">{{ __('Show all cats') }}</a>
+            <a class="p-2" href="{{route('cats.create')}}">{{ __('Add new cat') }}</a>
             @guest
                 @if(Route::has('register'))
-                    <a class="p-2 text-dark" href="{{ route('register') }}">Register</a>
+                    <a class="p-2 text-dark" href="{{ route('register') }}">{{ __('Register') }}</a>
                 @endif
-                <a class="p-2 text-dark" href="{{ route('login') }}">Login</a>
+                <a class="p-2 text-dark" href="{{ route('login') }}">{{ __('Login') }}</a>
             @else
+                <a class="p-2" href="{{route('users.show', ['user' => \Illuminate\Support\Facades\Auth::user()->id])}}">
+                    {{ __('Profile') }}
+                </a>
+                <a class="p-2" href="{{route('users.edit', ['user' => \Illuminate\Support\Facades\Auth::user()->id])}}">
+                    {{ __('Edit profile') }}
+                </a>
+
                 <a class="p-2 text-dark" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                >Logout ({{Auth::user()->name}})</a>
+                >{{ __('Logout') }} ({{Auth::user()->name}})</a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                 @csrf

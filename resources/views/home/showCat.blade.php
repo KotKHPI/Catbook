@@ -26,25 +26,25 @@
 
 {{--         <img src="{{ $cat->image->url() }}">--}}
 
-         <p>Added {{$cat->created_at->diffForHumans()}}</p>
+         <p>{{ __('Added') }} {{$cat->created_at->diffForHumans()}}</p>
 
          @update(['date' => $cat->created_at, 'name' => $cat->user->name]) @endupdate
 
          @update(['date' => $cat->updated_at])
-            Updated
+         {{ __('Update!') }}
          @endupdate
 
-         <p>Currently read by {{ $counter }} people</p>
+         {{ trans_choice('messages.people.reading', $counter) }}
 
          @if((new \Carbon\Carbon())->diffInMinutes($cat->created_at) < 20)
              @badge(['type' => 'primary'])
-                New!
+                {{ __('New!') }}
              @endbadge
          @endif
 
          @tags(['tags' => $cat->tags]) @endtags
 
-         <h4>Comments</h4>
+         <h4>{{ __('Comments') }}</h4>
 
          @commentForm(['route' => route('cats.comment.store', ['cat' => $cat->id])])
          @endcommentForm

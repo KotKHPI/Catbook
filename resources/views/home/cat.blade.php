@@ -29,11 +29,7 @@
                 @endupdate
                 @tags(['tags' => $cat->tags]) @endtags
 
-                @if($cat->comments_count)
-                    <p>{{$cat->comments_count}} comments</p>
-                @else
-                    <p>No comments yet!</p>
-                @endif
+                {{ trans_choice('messages.comments', $cat->comments_count) }}
 
                 <div class="mb-3">
 
@@ -61,7 +57,7 @@
                 </div>
 {{--            <x-tags :tags="$cat->tags" />--}}
             @empty
-                <div>Where are my cats?</div>
+                <div>{{ __('Where are my cats?') }}</div>
             @endforelse
         </div>
         <div class="col-4">

@@ -17,6 +17,13 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    public const LOCALE = [
+        'en' => 'English',
+        'es' => 'Español',
+        'de' => 'Deutsch'
+    ];
+
     protected $fillable = [
         'name',
         'email',
