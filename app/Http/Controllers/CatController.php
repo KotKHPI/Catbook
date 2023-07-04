@@ -8,6 +8,7 @@ use App\Models\CatName;
 use App\Models\Comment;
 use App\Models\Image;
 use App\Models\User;
+use App\Services\Counter;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -89,44 +90,11 @@ class CatController extends Controller
             return CatName::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
-        $sessionId = session()->getId();
-        $counterKey = "blog-post-{$id}-counter";
-        $usersKey = "blog-post-{$id}-users";
-
-        $users = Cache::tags(['cat-name'])->get($usersKey, []);
-        $usersUpdate = [];
-        $diffrence = 0;
-        $now = now();
-
-        foreach ($users as $session => $lastVisit) {
-            if ($now->diffInMinutes($lastVisit) >= 1) {
-                $diffrence--;
-            } else {
-                $usersUpdate[$session] = $lastVisit;
-            }
-        }
-
-        if(
-            !array_key_exists($sessionId, $users)
-            || $now->diffInMinutes($users[$sessionId]) >= 1
-        ) {
-            $diffrence++;
-        }
-
-        $usersUpdate[$sessionId] = $now;
-        Cache::forever($usersKey, $usersUpdate);
-
-        if (!Cache::tags(['cat-name'])->has($counterKey)) {
-            Cache::tags(['cat-name'])->forever($counterKey, 1);
-        } else {
-            Cache::tags(['cat-name'])->increment($counterKey, $diffrence);
-        }
-
-        $counter = Cache::tags(['cat-name'])->get($counterKey);
+        $counter = resolve(Counter::class);
 
         return view('home.showCat', [
             'cat' => $catName,
-            'counter' => $counter
+            'counter' => $counter->increment("cat-name{$id}", ['cat-name'])
         ]);
     }
 

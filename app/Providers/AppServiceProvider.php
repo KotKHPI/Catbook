@@ -7,6 +7,7 @@ use App\Models\CatName;
 use App\Models\Comment;
 use App\Observers\CatNameObserver;
 use App\Observers\CommentObserve;
+use App\Services\Counter;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -41,6 +42,11 @@ class AppServiceProvider extends ServiceProvider
 
         CatName::observe(CatNameObserver::class);
         Comment::observe(CommentObserve::class);
+
+        $this->app->bind(Counter::class, function ($app) {
+            return new Counter(5);
+        });
+
 
         view()->composer(['home.cat', 'home.showCat'], ActivityComposer::class);
     }
