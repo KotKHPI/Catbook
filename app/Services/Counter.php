@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Contracts\CounterContract;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Contracts\Session\Session;
+use Illuminate\Contracts\Cache\Factory as Cache;
 
 class Counter implements CounterContract {
 
@@ -49,7 +49,7 @@ class Counter implements CounterContract {
         }
 
         $usersUpdate[$sessionId] = $now;
-        Cache::forever($usersKey, $usersUpdate);
+        $cache->forever($usersKey, $usersUpdate);
 
         if (!$cache->has($counterKey)) {
             $cache->forever($counterKey, 1);
