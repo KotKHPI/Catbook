@@ -44,8 +44,17 @@ class AppServiceProvider extends ServiceProvider
         Comment::observe(CommentObserve::class);
 
         $this->app->bind(Counter::class, function ($app) {
-            return new Counter(5);
+            return new Counter(
+                $app->make('Illuminate\Contracts\Cache\Factory'),
+                $app->make('Illuminate\Contracts\Session\Session'),
+                10
+            );
         });
+
+        $this->app->bind(
+            'App\Contracts\CounterContract',
+            Counter::class
+        );
 
 
         view()->composer(['home.cat', 'home.showCat'], ActivityComposer::class);

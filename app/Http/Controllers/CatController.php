@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
 use App\Events\CatPosted;
 use App\Http\Requests\CatPost;
 use App\Models\CatName;
@@ -22,9 +23,12 @@ class CatController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct()
+    private $counter;
+
+    public function __construct(CounterContract $counter)
     {
         $this->middleware('auth')->only('create', 'edit', 'destroy');
+        $this->counter = $counter;
     }
 
     public function index()
@@ -90,11 +94,9 @@ class CatController extends Controller
             return CatName::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
-        $counter = resolve(Counter::class);
-
         return view('home.showCat', [
             'cat' => $catName,
-            'counter' => $counter->increment("cat-name{$id}", ['cat-name'])
+            'counter' => $this->counter->increment("cat-name{$id}", ['cat-name'])
         ]);
     }
 

@@ -2,22 +2,33 @@
 
 namespace App\Services;
 
+use App\Contracts\CounterContract;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
-class Counter {
+class Counter implements CounterContract {
 
     private $timeout;
+    private $cache;
+    private $session;
+    private $supportsTags;
 
-    public function __construct(int $timeout) {
+    public function __construct(Cache $cache, Session $session,int $timeout) {
         $this->timeout = $timeout;
+        $this->cache = $cache;
+        $this->session = $session;
+        $this->supportsTags = method_exists($cache, 'tags');
     }
 
-    public function increment(string $key, array $tags = null){
-        $sessionId = session()->getId();
+    public function increment(string $key, array $tags = null) : int{
+        $sessionId = $this->session->getId();
         $counterKey = "{$key}-counter";
         $usersKey = "{$key}-users";
 
-        $users = Cache::tags(['cat-name'])->get($usersKey, []);
+        $cache = $this->supportsTags && null !== $tags
+            ? $this->cache->tags($tags) : $this->cache;
+
+        $users = $cache->get($usersKey, []);
         $usersUpdate = [];
         $diffrence = 0;
         $now = now();
@@ -40,12 +51,14 @@ class Counter {
         $usersUpdate[$sessionId] = $now;
         Cache::forever($usersKey, $usersUpdate);
 
-        if (!Cache::tags(['cat-name'])->has($counterKey)) {
-            Cache::tags(['cat-name'])->forever($counterKey, 1);
+        if (!$cache->has($counterKey)) {
+            $cache->forever($counterKey, 1);
         } else {
-            Cache::tags(['cat-name'])->increment($counterKey, $diffrence);
+            $cache->increment($counterKey, $diffrence);
         }
 
-        $counter = Cache::tags(['cat-name'])->get($counterKey);
+        $counter = $cache->get($counterKey);
+
+        return $counter;
     }
 }

@@ -18,7 +18,7 @@
                     </del>
                 @endif
 
-                <p>{{$cat['age']}}</p>
+                <p>{{$cat['age']}} years old</p>
 
 {{--                <p class="text-muted">--}}
 {{--                    Added {{\Carbon\Carbon::parse($cat['created_at'])->diffForHumans() }}--}}

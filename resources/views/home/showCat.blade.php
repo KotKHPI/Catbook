@@ -22,11 +22,11 @@
              </div>
          @endif
 
-         <p>{{$cat->age}}</p>
+         <p>{{$cat->age}} year old</p>
 
 {{--         <img src="{{ $cat->image->url() }}">--}}
 
-         <p>{{ __('Added') }} {{$cat->created_at->diffForHumans()}}</p>
+{{--         <p>{{ __('Added') }} {{$cat->created_at->diffForHumans()}}</p>--}}
 
          @update(['date' => $cat->created_at, 'name' => $cat->user->name]) @endupdate
 
