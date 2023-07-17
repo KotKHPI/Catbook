@@ -26,7 +26,7 @@ Route::resource('cats', \App\Http\Controllers\CatController::class);
 Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
 
 Route::get('/cats/tag/{tag}', [CatTagController::class, 'index'])->name('cats.tags.index');
-Route::resource('cats.comment', \App\Http\Controllers\CatCommentConrtoller::class)->only('store');
+Route::resource('cats.comment', \App\Http\Controllers\CatCommentConrtoller::class)->only('index', 'store');
 Route::resource('users.comments', \App\Http\Controllers\UserCommentController::class)->only('store');
 
 //Route::get('mailable', function () {
