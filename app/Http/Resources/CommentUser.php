@@ -18,7 +18,7 @@ class CommentUser extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->when(Auth::user()->is_admin, $this->email)
+            'email' => $this->when(Auth::check() && Auth::user()->is_admin, $this->email)
         ];
     }
 }
