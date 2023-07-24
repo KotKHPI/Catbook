@@ -20,6 +20,8 @@
 
                 <p>{{$cat['age']}} years old</p>
 
+                @tags(['tags' => $cat->tags]) @endtags
+
 {{--                <p class="text-muted">--}}
 {{--                    Added {{\Carbon\Carbon::parse($cat['created_at'])->diffForHumans() }}--}}
 {{--                    by {{$cat->user->name}}--}}
@@ -27,9 +29,8 @@
 
                 @update(['date' => $cat->created_at, 'name' => $cat->user->name, 'userId' => $cat->user->id])
                 @endupdate
-                @tags(['tags' => $cat->tags]) @endtags
 
-                {{ trans_choice('messages.comments', $cat->comments_count) }}
+                <p>{{ trans_choice('messages.comments', $cat->comments_count) }}</p>
 
                 <div class="mb-3">
 
