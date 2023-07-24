@@ -43,18 +43,18 @@ class PostTest extends TestCase
 
         $this->actingAs($user);
 
-        $cat = new CatName();
-        $cat->name = 'Meow';
-        $cat->age = 12;
-        $cat->user_id = 1;
-        $cat->save();
+        $cat = $this->createDummyCatName();
+//        $cat->name = 'Meow';
+//        $cat->age = 12;
+//        $cat->user_id = 1;
+//        $cat->save();
 
         $response = $this->get('/cats');
 
-        $response->assertSeeText('Meow');
+        $response->assertSeeText($cat->name);
 
         $this->assertDatabaseHas('cat_names', [
-            'name' => 'Meow'
+            'name' => $cat->name
         ]);
     }
 
