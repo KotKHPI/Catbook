@@ -4,26 +4,60 @@
 
 @section('content')
 
+ <div class="row">
+     <div class="col-8">
 
-        <h1>{{$cat->name}}</h1>
-        <p>{{$cat->age}}</p>
-<p>Added {{$cat->created_at->diffForHumans()}}</p>
+         @if($cat->image)
+             <div style="background-image: url('{{ $cat->image->url() }}'); min-height: 500px; color: white; text-align: center; background-attachment: fixed;">
+                <h1 style="padding-top: 100px; text-shadow: 1px 2px #000">
+         @else
+             <h1>
+         @endif
+         {{$cat->name}}
+         @badge(['show' => now()->diffInMinutes($cat->created_at) < 25])
+             Brand new Cat
+         @endbadge
+             </h1>
+         @if($cat->image)
+             </div>
+         @endif
 
-    @if(now()->diffInMinutes($cat->created_at) < 5)
-<div class="alert alert-info">New!</div>
-    @endif
+         <p>{{$cat->age}} year old</p>
 
-        <h4>Comments</h4>
-    @forelse($cat->comments as $comment)
-        <p>
-            {{ $comment->content }}
-        </p>
-        <p>
-            added {{\Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}
-        </p>
-    @empty
-        <p>No comments yet!</p>
-    @endforelse
+{{--         <img src="{{ $cat->image->url() }}">--}}
 
+{{--         <p>{{ __('Added') }} {{$cat->created_at->diffForHumans()}}</p>--}}
+
+         @update(['date' => $cat->created_at, 'name' => $cat->user->name]) @endupdate
+
+         @update(['date' => $cat->updated_at])
+         {{ __('Update!') }}
+         @endupdate
+
+         {{ trans_choice('messages.people.reading', $counter) }}
+
+         @if((new \Carbon\Carbon())->diffInMinutes($cat->created_at) < 20)
+             @badge(['type' => 'primary'])
+                {{ __('New!') }}
+             @endbadge
+         @endif
+
+         @tags(['tags' => $cat->tags]) @endtags
+
+         <h4>{{ __('Comments') }}</h4>
+
+         @commentForm(['route' => route('cats.comment.store', ['cat' => $cat->id])])
+         @endcommentForm
+
+         @commentList(['comments' => $cat->comments])
+         @endcommentList
+
+     </div>
+
+        <div class="col-4">
+            @include('posts.partials.activity')
+        </div>
+
+ </div>
 
 @endsection

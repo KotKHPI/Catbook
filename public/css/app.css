@@ -10932,3 +10932,12 @@ a.text-dark:focus {
   }
 }
 
+.badge-lg {
+  front-size: 1rem;
+}
+
+.avatar {
+  width: 128px;
+  height: 128px;
+}
+

@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
+use App\Events\CatPosted;
+use App\Facades\CounterFacade;
 use App\Http\Requests\CatPost;
 use App\Models\CatName;
 use App\Models\Comment;
+use App\Models\Image;
+use App\Models\User;
+use App\Services\Counter;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class CatController extends Controller
 {
@@ -15,16 +24,20 @@ class CatController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    private $counter;
+
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only('create', 'edit', 'destroy');
     }
 
     public function index()
     {
+
         return view('home.cat',
-            ['cats' => CatName::withCount('comments')->get()]
-        );
+            [
+                'cats' => CatName::latestWithRelations()->get()
+            ]);
     }
 
     /**
@@ -41,13 +54,22 @@ class CatController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function store(CatPost $request)
     {
         $validete = $request->validated();
+        $validete['user_id'] = $request->user()->id;
         $cat = CatName::create($validete);
-        $cat->save();
+
+        if($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnail');
+            $cat->image()->save(
+                Image::make(['path' => $path])
+            );
+        }
+
+        event(new CatPosted($cat));
 
         $request->session()->flash('status', 'New cat!');
 
@@ -58,12 +80,23 @@ class CatController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
+//        return view('home.showCat', [
+//            'cat' => CatName::with(['comments' => function($query) {
+//                return $query->latest();
+//            }])->findOrFail($id)
+//        ]);   One of variant using Local Query
+
+        $catName = Cache::tags(['cat-name'])->remember("cat-name-{$id}", 60, function () use($id) {
+            return CatName::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
+        });
+
         return view('home.showCat', [
-            'cat' => CatName::with('comments')->findOrFail($id)
+            'cat' => $catName,
+            'counter' => CounterFacade::increment("cat-name{$id}", ['cat-name'])
         ]);
     }
 
@@ -75,7 +108,13 @@ class CatController extends Controller
      */
     public function edit($id)
     {
-        return view('home.editCat', ['cat' => CatName::findOrFail($id)]);
+        $cat = CatName::findOrFail($id);
+//        if(\Illuminate\Support\Facades\Gate::denies('update-cat', $cat)) {
+//            abort(403);
+//        }
+        $this->authorize($cat);
+
+        return view('home.editCat', ['cat' => $cat]);
     }
 
     /**
@@ -88,8 +127,24 @@ class CatController extends Controller
     public function update(CatPost $request, $id)
     {
         $cat = CatName::findOrFail($id);
+        $this->authorize($cat);
         $valideted = $request->validated();
         $cat->fill($valideted);
+
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnail');
+
+            if($cat->image) {
+                Storage::delete($cat->image->path);
+                $cat->image->path = $path;
+                $cat->image->save();
+            } else {
+                $cat->image()->save(
+                    Image::make(['path' => $path])
+                );
+            }
+        }
+
         $cat->save();
 
         $request->session()->flash('status', 'Cat was update!');
@@ -106,6 +161,9 @@ class CatController extends Controller
     public function destroy($id)
     {
         $cat = CatName::findOrFail($id);
+
+        $this->authorize($cat);
+
         $cat->delete();
 
         session()->flash('status', 'Cat ' . $cat['name'] . ' was lost(');

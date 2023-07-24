@@ -13,43 +13,48 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createDummyCatName() : CatName {
-        $cat = new CatName();
-        $cat->name = 'Meow';
-        $cat->age = 12;
-        $cat->save();
+    private function createDummyCatName($userId = null) : CatName {
+//        $cat = new CatName();
+//        $cat->name = 'Meow';
+//        $cat->age = 12;
+//        $cat->save();
+//
+//        return $cat;
 
-        return $cat;
+        return CatName::factory()->create([
+            'user_id' => $userId ?? $this->user()->id,
+        ]);
     }
 
-//    public function testNoCatWhenNothingInDatabase()
-//    {
-//        $user = User::factory()->make();
-//
-//        $this->actingAs($user);
-//
-//        $response = $this->get('/cats');
-//
-//        $response->assertSeeText("Where are my cats?");
-//    } TO DO
+    public function testNoCatWhenNothingInDatabase()
+{
+    $user = User::factory()->make();
+
+    $this->actingAs($user);
+
+    $response = $this->get('/cats');
+
+    $response->assertSeeText("Where are my cats?");
+}
 
     public function testSee1CatPostWhenThereIs1()
     {
-        $user = User::factory()->make();
+        $user = $this->user();
 
         $this->actingAs($user);
 
-        $cat = new CatName();
-        $cat->name = 'Meow';
-        $cat->age = 12;
-        $cat->save();
+        $cat = $this->createDummyCatName();
+//        $cat->name = 'Meow';
+//        $cat->age = 12;
+//        $cat->user_id = 1;
+//        $cat->save();
 
         $response = $this->get('/cats');
 
-        $response->assertSeeText('Meow');
+        $response->assertSeeText($cat->name);
 
         $this->assertDatabaseHas('cat_names', [
-            'name' => 'Meow'
+            'name' => $cat->name
         ]);
     }
 
@@ -57,15 +62,10 @@ class PostTest extends TestCase
     {
         $params = [
           'name' => 'meow',
-          'age' => 10
+          'age' => 10,
         ];
 
-        $user = User::factory()->make();
-
-        $this->actingAs($user);
-
-
-        $this->actingAs($user)
+        $this->actingAs($this->user()) //You can use {user()} because I have function in TestCase.php
             ->post('/cats', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -80,10 +80,7 @@ class PostTest extends TestCase
             'age' => 1
         ];
 
-        $user = User::factory()->make();
-
-
-        $this->actingAs($user)
+        $this->actingAs($this->user()) //You can use {user()} because I have function in TestCase.php
             ->post('/cats', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
@@ -95,9 +92,10 @@ class PostTest extends TestCase
 
     public function testUpdateValid()
     {
-        $cat = $this->createDummyCatName();
+        $user = $this->user();
+        $cat = $this->createDummyCatName($user->id);
 
-        $user = User::factory()->make();
+//        $user = User::factory()->make();
 
         $cat2 = [
             'name' => 'New cat',
@@ -112,13 +110,15 @@ class PostTest extends TestCase
         $this->assertEquals(session('status'), 'Cat was update!');
 
         $this->assertDatabaseMissing('cat_names', $cat->toArray());
+//        $this->assertSoftDeleted('cat_names', $cat->toArray());
     }
 
     public function testDeleting()
     {
-        $cat = $this->createDummyCatName();
+        $user = $this->user();
+        $cat = $this->createDummyCatName($user->id);
 
-        $user = User::factory()->make();
+//        $user = User::factory()->make();
 
         $this->actingAs($user)
             ->delete("/cats/{$cat->id}")
@@ -136,9 +136,7 @@ class PostTest extends TestCase
             'age' => 123
         ];
 
-        $user = User::factory()->make();
-
-        $this->actingAs($user)
+        $this->actingAs($this->user()) //You can use {user()} because I have function in TestCase.php
             ->post('/cats', $cat)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -146,38 +144,18 @@ class PostTest extends TestCase
         $this->assertEquals(session('status'), 'New cat!');
     }
 
-//    public function testUpdateAgain()
-//    {
-//        $cat = [
-//            'name' => "Cat",
-//            'age' => 1
-//        ];
-//
-//        $user = User::factory()->make();
-//
-//        $cat2 = [
-//            'name' => "Super Cat",
-//            'age' => 123
-//        ];
-//
-//        $this->actingAs($user)
-//            ->put("/cats/{$cat->id}", $cat2)
-//            ->assertStatus(302)
-//            ->assertSessionHas('status');
-//
-//        $this->assertEquals(session('status'), 'Cat was update!');
-//        $this->assertDatabaseMissing('cat_names', $cat);
-//    }
 
     public function testSee1CatNameWithComments() {
+        $user = $this->user();
+
+//        $this->actingAs($user);
+
         $cat = $this->createDummyCatName();
 
-        $user = User::factory()->make();
-
-        $this->actingAs($user);
-
         Comment::factory()->count(4)->create([
-            'cat_name_id' => $cat->id
+            'commentable_id' => $cat->id,
+            'commentable_type' => 'App\Models\CatName',
+            'user_id' => $user->id
         ]);
 
         $response = $this->get('/cats');

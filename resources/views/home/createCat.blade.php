@@ -3,7 +3,7 @@
 @section('title', 'catCreat')
 
 @section('content')
-    <form action="{{route('cats.store')}}" method="POST">
+    <form action="{{route('cats.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
         @include('posts.partials.form')
         <div><input type="submit" value="Create" class="btn btn-primary btn-block"></div>
