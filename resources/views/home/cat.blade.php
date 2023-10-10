@@ -4,6 +4,12 @@
 
 @section('content')
 
+    <style>
+        .link {
+            @apply font-medium text-gray-700 underline decoration-pink-500
+        }
+    </style>
+
     <div class="row">
         <div class="col-8">
             @forelse($cats as $cat)
@@ -61,9 +67,16 @@
                 <div>{{ __('Where are my cats?') }}</div>
             @endforelse
         </div>
+
         <div class="col-4">
             @include('posts.partials.activity')
         </div>
     </div>
+
+    @if($cats->count())
+        <nav>
+            {{ $cats->links() }}
+        </nav>
+    @endif
 
 @endsection

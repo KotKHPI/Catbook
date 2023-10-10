@@ -9,6 +9,7 @@ use App\Observers\CatNameObserver;
 use App\Observers\CommentObserve;
 use App\Services\Counter;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -63,5 +64,6 @@ class AppServiceProvider extends ServiceProvider
 //        ResourceCollection::withoutWrapping();
 
         view()->composer(['home.cat', 'home.showCat'], ActivityComposer::class);
+        Paginator::useBootstrap();
     }
 }
