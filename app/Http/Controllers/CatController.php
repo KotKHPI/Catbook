@@ -36,7 +36,7 @@ class CatController extends Controller
 
         return view('home.cat',
             [
-                'cats' => CatName::latestWithRelations()->get()
+                'cats' => CatName::latestWithRelations()->paginate(10)
             ]);
     }
 
