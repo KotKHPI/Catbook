@@ -24,6 +24,7 @@ I hope you will enjoy using my website.
 - Work with forms
 - CRUD
 - Assets & Styling (Laravel Mix, Bootstrap)
+- Pagination
 - Tests
 - One-to-One, One-to-Many, Many-to-Many Eloquent Relations
 - Querying basic
